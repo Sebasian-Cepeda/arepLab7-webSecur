@@ -19,7 +19,7 @@ public class hashSha {
             String sha256 = DatatypeConverter.printHexBinary(digest).toLowerCase();
 
             // imprimir resumen de mensaje SHA-256
-            System.out.println(sha256);
+            System.out.println("HashCode: "+sha256);
         } catch (NoSuchAlgorithmException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
