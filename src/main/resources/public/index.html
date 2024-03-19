@@ -1,19 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>Log server</title>
+        <title>Login Secure</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="icon" href="logo.jpg">
         <link rel="stylesheet" href="styles.css">
+        <script src="app.js"></script>
     </head>
     
     <body>
         <h1>Logs</h1>
-        <form action="/logServerFacade" method="post">
+        <form action="/login">
             <input type="text" id="user" name="user" placeholder="User name"><br><br>
-            <input type="password" id="password" name="password" placeholder="password"><br><br>
-            <input type="button" id="getLogs" value="LogIn" onclick="loadGetMsg()">
+            <input type="password" id="psw" name="psw" placeholder="password"><br><br>
+            <input type="button" id="logIn" value="LogIn" onclick="login(user,psw)">
+           
         </form>
+
+        <div id="logInMsg"></div>
     </body>
 </html>

@@ -18,7 +18,9 @@ import javax.net.ssl.TrustManagerFactory;
 
 public class SecureURLReader {
 
-    public static void main(String[] args) {
+    public static String secureURLRead(String user, String psw) {
+
+        String URLResp = null;
         try {
 
             // Create a file and a password representation
@@ -32,28 +34,28 @@ public class SecureURLReader {
             // Get the singleton instance of the TrustManagerFactory
             TrustManagerFactory tmf = TrustManagerFactory
                     .getInstance(TrustManagerFactory.getDefaultAlgorithm());
-            
+
             // Itit the TrustManagerFactory using the truststore object
             tmf.init(trustStore);
-            
-            //Print the trustManagers returned by the TMF
-            //only for debugging
-            for(TrustManager t: tmf.getTrustManagers()){
+
+            // Print the trustManagers returned by the TMF
+            // only for debugging
+            for (TrustManager t : tmf.getTrustManagers()) {
                 System.out.println(t);
             }
-            
-            //Set the default global SSLContext so all the connections will use it
+
+            // Set the default global SSLContext so all the connections will use it
             SSLContext sslContext = SSLContext.getInstance("TLS");
             sslContext.init(null, tmf.getTrustManagers(), null);
             SSLContext.setDefault(sslContext);
 
             // We can now read this URL
-            readURL("https://localhost:5000/hello");
+            URLResp = readURL("https://localhost:4567/login?user=" + user + "&psw=" + psw);
 
-            // This one can't be read because the Java default truststore has been 
+            // This one can't be read because the Java default truststore has been
             // changed.
-            readURL("https://www.google.com");         
-        
+            // readURL("https://www.google.com");
+
         } catch (KeyStoreException ex) {
             Logger.getLogger(SecureURLReader.class.getName()).log(Level.SEVERE, null, ex);
         } catch (FileNotFoundException ex) {
@@ -67,10 +69,11 @@ public class SecureURLReader {
         } catch (KeyManagementException ex) {
             Logger.getLogger(SecureURLReader.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        return URLResp;
     }
 
-    public static void readURL(String sitetoread) {
+    public static String readURL(String sitetoread) {
+        StringBuffer resp = new StringBuffer();
         try {
             // Crea el objeto que representa una URL2
             URL siteURL = new URL(sitetoread);
@@ -85,7 +88,7 @@ public class SecureURLReader {
             for (Map.Entry<String, List<String>> entry : entrySet) {
                 String headerName = entry.getKey();
 
-                //Si el nombre es nulo, significa que es la linea de estado
+                // Si el nombre es nulo, significa que es la linea de estado
                 if (headerName != null) {
                     System.out.print(headerName + ":");
                 }
@@ -102,9 +105,12 @@ public class SecureURLReader {
             String inputLine = null;
             while ((inputLine = reader.readLine()) != null) {
                 System.out.println(inputLine);
+                resp.append(inputLine);
             }
         } catch (IOException x) {
             System.err.println(x);
+            resp.append(x);
         }
+        return resp.toString();
     }
 }
